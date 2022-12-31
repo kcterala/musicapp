@@ -1,5 +1,7 @@
 package com.kcterala.musicapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +13,9 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +25,7 @@ public class Song {
     @OneToOne
     @JoinColumn(referencedColumnName = "id")
     private Rating rating;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "song_artist_table",
             joinColumns = @JoinColumn(name = "songId"),
@@ -32,4 +33,44 @@ public class Song {
     )
     private Set<Artist> artists;
 
+    public long getSongId() {
+        return songId;
+    }
+
+    public void setSongId(long songId) {
+        this.songId = songId;
+    }
+
+    public String getSongname() {
+        return songname;
+    }
+
+    public void setSongname(String songname) {
+        this.songname = songname;
+    }
+
+    public LocalDate getDateOfRelease() {
+        return dateOfRelease;
+    }
+
+    public void setDateOfRelease(LocalDate dateOfRelease) {
+        this.dateOfRelease = dateOfRelease;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
+    }
+
+    @JsonManagedReference
+    public Set<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(Set<Artist> artists) {
+        this.artists = artists;
+    }
 }

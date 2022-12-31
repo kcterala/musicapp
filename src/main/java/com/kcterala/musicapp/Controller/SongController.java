@@ -5,7 +5,6 @@ import com.kcterala.musicapp.entity.Song;
 import com.kcterala.musicapp.model.SongRequest;
 import com.kcterala.musicapp.repository.ArtistRepository;
 import com.kcterala.musicapp.repository.SongRepository;
-import com.kcterala.musicapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
