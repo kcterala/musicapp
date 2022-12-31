@@ -23,6 +23,9 @@ public class User implements UserDetails {
     private long id;
     private String username;
     private String password;
+    @OneToOne
+    @JoinColumn(referencedColumnName = "id")
+    private Rating rating;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
