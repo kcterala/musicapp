@@ -8,3 +8,14 @@ spring:
     database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
     hibernate:
       ddl-auto: update
+
+
+jwt:
+  secret: anirudh
+
+logging:
+  level:
+    org:
+      springframework:
+        security:
+          jwt: DEBUG
