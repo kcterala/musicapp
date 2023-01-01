@@ -14,8 +14,9 @@ function fetchService(url, requestMethod, jwt, requestBody) {
     fetchData.body = JSON.stringify(requestBody);
   }
 
-  const res = fetch(url, fetchData);
-  if (res.status === 200) return res.json();
+  return fetch(url, fetchData).then((res) => {
+    if (res.status === 200) return res.json();
+  });
 }
 
 export default fetchService;
