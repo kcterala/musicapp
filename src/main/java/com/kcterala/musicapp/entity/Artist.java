@@ -2,6 +2,8 @@ package com.kcterala.musicapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,10 +24,11 @@ public class Artist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long artistId;
     private String artistName;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
     private String bio;
     @ManyToMany(mappedBy = "artists", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Song> songs;
 
 
@@ -64,7 +67,7 @@ public class Artist {
     public Set<Song> getSongs() {
         return songs;
     }
-    @JsonBackReference
+
     public void setSongs(Set<Song> songs) {
         this.songs = songs;
     }

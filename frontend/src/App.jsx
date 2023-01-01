@@ -3,6 +3,8 @@ import LoginPage from "./pages/LoginPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import PrivateRoute from "./components/PrivateRoute";
+import AddArtist from "./pages/AddArtist";
+import AddSong from "./pages/AddSong";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
             }
           />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/artist" element={<AddArtist />} />
+          <Route path="/song" element={<AddSong />} />
         </Routes>
       </BrowserRouter>
     </div>

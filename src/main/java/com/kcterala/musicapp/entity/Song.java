@@ -1,5 +1,6 @@
 package com.kcterala.musicapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class Song {
             joinColumns = @JoinColumn(name = "songId"),
             inverseJoinColumns = @JoinColumn(name = "artistId")
     )
+    @JsonIgnore
     private Set<Artist> artists;
 
     public long getSongId() {
@@ -65,7 +67,7 @@ public class Song {
         this.rating = rating;
     }
 
-    @JsonManagedReference
+
     public Set<Artist> getArtists() {
         return artists;
     }
