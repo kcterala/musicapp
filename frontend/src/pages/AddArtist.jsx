@@ -14,7 +14,6 @@ const AddArtist = () => {
     const newArtist = { ...artist };
     newArtist[prop] = value;
     setArtist(newArtist);
-    console.log(newArtist);
   }
 
   function addArtist() {

@@ -14,11 +14,13 @@ import javax.persistence.*;
 @Builder
 public class Rating {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private int ratingValue;
-    @OneToOne(mappedBy = "rating")
+    @OneToOne
+    @JoinColumn(referencedColumnName = "songId")
     private Song song;
-    @OneToOne(mappedBy = "rating")
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id")
     private User user;
 }

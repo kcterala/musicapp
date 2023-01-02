@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -23,8 +24,8 @@ public class Song {
     private long songId;
     private String songname;
     private LocalDate dateOfRelease;
-    @OneToOne
-    @JoinColumn(referencedColumnName = "id")
+    @OneToOne(mappedBy = "song", orphanRemoval = true)
+    @JsonIgnore
     private Rating rating;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
