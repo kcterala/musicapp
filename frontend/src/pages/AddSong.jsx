@@ -3,26 +3,42 @@ import { useLoaderData } from "react-router";
 import fetchService from "../services/fetchService";
 import useLocalState from "../services/useLocalStorage";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import Multiselect from "multiselect-react-dropdown";
 
 const AddSong = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
-  const [artists, setArtists] = useState([]);
+  let [artists, setArtists] = useState([]);
   const [song, setSong] = useState({
     songname: "",
     dateOfRelease: "",
-    artistIds: [],
   });
-
+  let [options, setOptions] = useState([]);
+  console.log(artists);
   useEffect(() => {
-    fetchService("http://localhost:8080/artist", "get", jwt).then((data) =>
-      console.log(data)
-    );
+    fetchService("http://localhost:8080/artist", "get", jwt).then((data) => {
+      options = [];
+      data.map((obj) => {
+        const option = {
+          val: obj.artistId,
+          key: obj.artistName,
+        };
+        options.push(option);
+      });
+      setOptions(options);
+    });
   }, []);
 
   function updateSong(prop, value) {
     const newSong = { ...song };
     newSong[prop] = value;
     setSong(newSong);
+  }
+
+  function addArtist() {
+    song.artistIds = artists;
+    fetchService("http://localhost:8080/song", "post", jwt, song).then((data) =>
+      console.log(data)
+    );
   }
 
   return (
@@ -33,8 +49,9 @@ const AddSong = () => {
       }}
     >
       <Row>
-        <Col>
+        <Col className="d-flex justify-content-between">
           <h1>Add Song</h1>
+          <Button> + Add Artist</Button>
         </Col>
       </Row>
       <Row>
@@ -65,10 +82,28 @@ const AddSong = () => {
         </Col>
       </Row>
       <Row>
-        <Col></Col>
+        <Col>
+          <p>Select Artists</p>
+          <Multiselect
+            displayValue="key"
+            onKeyPressFn={function noRefCheck() {}}
+            onRemove={(event) => {
+              artists = [];
+              event.map((obj) => artists.push(obj.val));
+              setArtists(artists);
+            }}
+            onSearch={function noRefCheck() {}}
+            onSelect={(event) => {
+              artists = [];
+              event.map((obj) => artists.push(obj.val));
+              setArtists(artists);
+            }}
+            options={options}
+          />
+        </Col>
       </Row>
 
-      <Button variant="primary" onClick={() => addArtist()}>
+      <Button className="mt-4" variant="primary" onClick={() => addArtist()}>
         Save
       </Button>
     </Container>

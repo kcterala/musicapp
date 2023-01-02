@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class SongRequest {
     private String songname;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfRelease;
 
     private ArrayList<Integer> artistIds;
