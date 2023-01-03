@@ -78,7 +78,7 @@ const HomePage = () => {
       </Row>
       <Row>
         <Col>
-          <Table striped bordered hover>
+          <Table striped bordered hover className="text-center">
             <thead>
               <tr>
                 <th>Song Name</th>
@@ -95,7 +95,7 @@ const HomePage = () => {
                     <td>{song.dateOfRelease}</td>
                     <td>
                       {song && (
-                        <div className="d-flex ">
+                        <div className="d-flex justify-content-center">
                           {song.artists.map((artist) => (
                             <p
                               key={artist.artistId}
@@ -108,8 +108,8 @@ const HomePage = () => {
                         </div>
                       )}
                     </td>
-                    <td>
-                      <div className="d-flex">
+                    <td className="text-center">
+                      <div className="d-flex justify-content-center">
                         <Star
                           id={song.songId}
                           handleRating={rateTheSong}
@@ -143,7 +143,7 @@ const HomePage = () => {
       </Row>
       <Row>
         <Col>
-          <Table striped bordered hover>
+          <Table striped bordered hover className="text-center">
             <thead>
               <tr>
                 <th>Artist Name</th>
@@ -159,7 +159,7 @@ const HomePage = () => {
                     <td>{artist.dateOfBirth}</td>
                     <td>
                       {artist && (
-                        <div className="d-flex ">
+                        <div className="d-flex justify-content-center">
                           {artist.songs.map((song) => (
                             <p
                               key={artist.artistId}
