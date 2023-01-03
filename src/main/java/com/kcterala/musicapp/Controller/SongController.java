@@ -34,7 +34,7 @@ public class SongController {
     private RatingRepository ratingRepo;
 
     @PostMapping
-    public ResponseEntity<?> createSong(@RequestBody SongRequest songRequest){
+    public ResponseEntity<?> createSong(@RequestBody SongRequest songRequest,@AuthenticationPrincipal User user){
         ArrayList<Integer> ids = songRequest.getArtistIds();
         Set<Artist> artistSet = ids.stream().map(i -> artistRepo.findById(i.longValue()).orElse(null)).collect(Collectors.toSet());
         Song song = Song.builder()
@@ -42,8 +42,14 @@ public class SongController {
                 .songname(songRequest.getSongname())
                 .dateOfRelease(songRequest.getDateOfRelease())
                 .build();
-
         song = songRepo.save(song);
+        Rating rating = Rating.builder()
+                .song(song)
+                .ratingValue(0)
+                .user(user)
+                .build();
+
+        ratingRepo.save(rating);
 
         return new ResponseEntity<Song>(song, HttpStatus.OK);
     }
@@ -69,7 +75,7 @@ public class SongController {
                 .user(user)
                 .build();
         rating = ratingRepo.save(rating);
-        song.setRating(rating);
+        song.getRating().add(rating);
         user.getRating().add(rating);
         return new ResponseEntity<Long>(rating.getId(), HttpStatus.OK);
     }

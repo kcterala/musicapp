@@ -6,13 +6,14 @@ const colors = {
   grey: "#a9a9a9",
 };
 
-function Star() {
+function Star(props) {
+  const { id, handleRating } = props;
   const [currentValue, setCurrentValue] = useState(0);
   const [hoverValue, setHoverValue] = useState(undefined);
   const stars = Array(5).fill(0);
-
   const handleClick = (value) => {
     setCurrentValue(value);
+    handleRating(id, value);
   };
 
   const handleMouseOver = (newHoverValue) => {
@@ -22,12 +23,11 @@ function Star() {
   const handleMouseLeave = () => {
     setHoverValue(undefined);
   };
-
   return (
     <div>
       {/* <h2> React Ratings </h2> */}
       <div style={styles.stars}>
-        {stars.map((_, index) => {
+        {stars.map((value, index) => {
           return (
             <FaStar
               key={index}
@@ -61,20 +61,6 @@ const styles = {
   stars: {
     display: "flex",
     flexDirection: "row",
-  },
-  textarea: {
-    border: "1px solid #a9a9a9",
-    borderRadius: 5,
-    padding: 10,
-    margin: "20px 0",
-    minHeight: 100,
-    width: 300,
-  },
-  button: {
-    border: "1px solid #a9a9a9",
-    borderRadius: 5,
-    width: 300,
-    padding: 10,
   },
 };
 

@@ -1,17 +1,13 @@
 package com.kcterala.musicapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,18 +18,21 @@ public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long songId;
+
+    private int totalRating;
+    private float avgRating;
     private String songname;
     private LocalDate dateOfRelease;
-    @OneToOne(mappedBy = "song", orphanRemoval = true)
+    @OneToMany(mappedBy = "song", orphanRemoval = true)
     @JsonIgnore
-    private Rating rating;
+    private List<Rating> rating;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "song_artist_table",
             joinColumns = @JoinColumn(name = "songId"),
             inverseJoinColumns = @JoinColumn(name = "artistId")
     )
-    @JsonIgnore
+
     private Set<Artist> artists;
 
     public long getSongId() {
@@ -59,15 +58,14 @@ public class Song {
     public void setDateOfRelease(LocalDate dateOfRelease) {
         this.dateOfRelease = dateOfRelease;
     }
-
-    public Rating getRating() {
+    @JsonIgnore
+    public List<Rating> getRating() {
         return rating;
     }
 
-    public void setRating(Rating rating) {
+    public void setRating(List<Rating> rating) {
         this.rating = rating;
     }
-
 
     public Set<Artist> getArtists() {
         return artists;
@@ -75,5 +73,27 @@ public class Song {
 
     public void setArtists(Set<Artist> artists) {
         this.artists = artists;
+    }
+
+    public float getAvgRating() {
+        this.avgRating = (float)getTotalRating() / getRating().size();
+        return avgRating;
+    }
+
+    public int getTotalRating() {
+        return getAllRatings();
+    }
+
+    public void setTotalRating(int totalRating) {
+        this.totalRating = totalRating;
+    }
+
+    private int getAllRatings(){
+        List<Rating> ratings = getRating();
+        int sum = 0;
+        for(Rating rating1 : ratings){
+            sum += rating1.getRatingValue();
+        }
+        return sum;
     }
 }

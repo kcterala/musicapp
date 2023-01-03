@@ -1,5 +1,6 @@
 package com.kcterala.musicapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,10 +18,11 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private int ratingValue;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(referencedColumnName = "songId")
     private Song song;
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
+    @JsonIgnore
     private User user;
 }
