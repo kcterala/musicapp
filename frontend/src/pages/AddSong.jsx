@@ -9,7 +9,10 @@ const AddSong = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    window.location.href = "/song";
+  };
   const handleShow = () => setShow(true);
   let [artists, setArtists] = useState([]);
   const [song, setSong] = useState({
@@ -17,6 +20,7 @@ const AddSong = () => {
     dateOfRelease: "",
   });
   let [options, setOptions] = useState([]);
+  let count = 0;
   console.log(artists);
   useEffect(() => {
     fetchService("http://localhost:8080/artist", "get", jwt).then((data) => {

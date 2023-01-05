@@ -7,8 +7,8 @@ const colors = {
 };
 
 function Star(props) {
-  const { id, handleRating } = props;
-  const [currentValue, setCurrentValue] = useState(3);
+  const { id, value, handleRating } = props;
+  const [currentValue, setCurrentValue] = useState(value);
   const [hoverValue, setHoverValue] = useState(undefined);
   const stars = Array(5).fill(0);
   const handleClick = (value) => {

@@ -1,9 +1,11 @@
 package com.kcterala.musicapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kcterala.musicapp.repository.SongRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -32,7 +34,6 @@ public class Song {
             joinColumns = @JoinColumn(name = "songId"),
             inverseJoinColumns = @JoinColumn(name = "artistId")
     )
-
     private Set<Artist> artists;
 
     public long getSongId() {

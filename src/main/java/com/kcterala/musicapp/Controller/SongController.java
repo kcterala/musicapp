@@ -6,6 +6,7 @@ import com.kcterala.musicapp.entity.Song;
 import com.kcterala.musicapp.entity.User;
 import com.kcterala.musicapp.model.RatingRequest;
 import com.kcterala.musicapp.model.SongRequest;
+import com.kcterala.musicapp.model.SongResponse;
 import com.kcterala.musicapp.repository.ArtistRepository;
 import com.kcterala.musicapp.repository.RatingRepository;
 import com.kcterala.musicapp.repository.SongRepository;
@@ -55,8 +56,15 @@ public class SongController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getSong(@PathVariable long id){
-        return new ResponseEntity<Song>(songRepo.findById(id).orElse(null),HttpStatus.OK);
+    public ResponseEntity<?> getSong(@PathVariable long id,@AuthenticationPrincipal User user ){
+        Song song = songRepo.findById(id).orElse(null);
+        assert song != null;
+        SongResponse songResponse = SongResponse.builder()
+                .song(song)
+                .currRating(songRepo.getRatingBySongAndUser(song.getSongId(),user.getId()))
+                .build();
+
+        return new ResponseEntity<SongResponse>(songResponse,HttpStatus.OK);
     }
 
 
@@ -83,12 +91,16 @@ public class SongController {
 
 
     @GetMapping("/top")
-    public ResponseEntity<?> getTopSongs(){
+    public ResponseEntity<?> getTopSongs(@AuthenticationPrincipal User user){
         List<Rating> ratings = ratingRepo.getTopRatings();
-        List<Song> songs = new ArrayList<>();
+        List<SongResponse> songs = new ArrayList<>();
         for(Rating rating : ratings){
             long songId = rating.getSong().getSongId();
-            songs.add(songRepo.findById(songId).orElse(null));
+            Song song = songRepo.findById(songId).orElse(null);
+            assert song != null;
+            SongResponse songResponse = SongResponse.builder()
+                            .song(song).currRating(songRepo.getRatingBySongAndUser(song.getSongId(), user.getId())).build();
+            songs.add(songResponse);
         }
 
         return new ResponseEntity<>(songs,HttpStatus.OK);

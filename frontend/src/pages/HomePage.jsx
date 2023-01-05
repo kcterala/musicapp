@@ -15,15 +15,18 @@ import useLocalState from "../services/useLocalStorage";
 const HomePage = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
   const [songs, setSongs] = useState([]);
+  console.log(songs);
   useEffect(() => {
     getTopSongs();
     getTopArtists();
+    console.log("hello");
   }, []);
 
   function getTopSongs() {
-    fetchService("http://localhost:8080/song/top", "get", jwt).then((data) =>
-      setSongs(data)
-    );
+    fetchService("http://localhost:8080/song/top", "get", jwt).then((data) => {
+      console.log(data);
+      setSongs(data);
+    });
   }
 
   function rateTheSong(id, ratingValue) {
@@ -34,6 +37,7 @@ const HomePage = () => {
     fetchService("http://localhost:8080/song/rate", "post", jwt, reqBody).then(
       (data) => {
         getTopSongs();
+        getTopArtists();
       }
     );
   }
@@ -45,7 +49,6 @@ const HomePage = () => {
       setArtists(data)
     );
   }
-  console.log(artists);
 
   return (
     <Container className="mt-5">
@@ -90,13 +93,13 @@ const HomePage = () => {
             <tbody>
               {songs &&
                 songs.map((song) => (
-                  <tr key={song.songId}>
-                    <td>{song.songname}</td>
-                    <td>{song.dateOfRelease}</td>
+                  <tr key={song.song.songId}>
+                    <td>{song.song.songname}</td>
+                    <td>{song.song.dateOfRelease}</td>
                     <td>
                       {song && (
                         <div className="d-flex justify-content-center">
-                          {song.artists.map((artist) => (
+                          {song.song.artists.map((artist) => (
                             <p
                               key={artist.artistId}
                               style={{ marginLeft: ".5rem" }}
@@ -111,10 +114,13 @@ const HomePage = () => {
                     <td className="text-center">
                       <div className="d-flex justify-content-center">
                         <Star
-                          id={song.songId}
+                          id={song.song.songId}
+                          value={song.currRating}
                           handleRating={rateTheSong}
                         ></Star>
-                        <p style={{ color: "#fffff" }}>({song.avgRating})</p>
+                        <p style={{ color: "#fffff" }}>
+                          ({song.song.avgRating})
+                        </p>
                       </div>
                     </td>
                   </tr>
